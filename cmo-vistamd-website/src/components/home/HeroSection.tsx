@@ -224,7 +224,7 @@ const HeroSection = () => {
                 <h3 style={{
                   fontSize: 'clamp(1.2rem, 4vw, 3rem)',
                   fontWeight: 'bold',
-                  position: 'center',
+                  textAlign: 'center',
                   color: 'white',
                   marginBottom: '0.5rem',
                   background: 'linear-gradient(135deg, #22c55e 0%, #10b981 100%)',

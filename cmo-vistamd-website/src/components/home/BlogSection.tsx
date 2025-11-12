@@ -1,6 +1,6 @@
 // src/components/home/BlogSection.tsx
 import { useState } from 'react'
-import { Calendar, User, ArrowRight, Search, ChevronDown } from 'lucide-react'
+import { Calendar, User, ArrowRight,  ChevronDown } from 'lucide-react'
 
 const BlogSection = () => {
   const [hoveredArticle, setHoveredArticle] = useState<number | null>(null)
@@ -330,7 +330,6 @@ const BlogSection = () => {
                 <h3 style={{
                   fontSize: '1.3rem',
                   fontWeight: 'bold',
-                  color: '#0f172a',
                   marginBottom: '1rem',
                   lineHeight: '1.4',
                   transition: 'color 0.3s ease',
