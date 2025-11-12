@@ -169,7 +169,6 @@ const FAQSection = () => {
                 <h3 style={{
                   fontSize: '1.1rem',
                   fontWeight: '600',
-                  color: '#0f172a',
                   margin: 0,
                   flex: 1,
                   transition: 'color 0.3s ease',

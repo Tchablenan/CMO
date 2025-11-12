@@ -231,7 +231,7 @@ const ServicesSection = () => {
                   <h3 style={{
                     fontSize: '1.35rem',
                     fontWeight: 'bold',
-                    color: '#0f172a',
+                    
                     marginBottom: '1rem',
                     transition: 'color 0.3s ease',
                     color: hoveredService === index ? service.color : '#0f172a'
