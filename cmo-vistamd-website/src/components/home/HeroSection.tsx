@@ -20,6 +20,9 @@ const HeroSection = () => {
     time: 'Morning 10 AM'
   })
 
+  // URL de l'image de fond (optionnelle)
+  const backgroundImage = '/assets/doctor-reading.jpg'
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     console.log('Formulaire soumis:', formData)
@@ -34,8 +37,11 @@ const HeroSection = () => {
   }
 
   return (
-    <div id='home' className="rts-banner-area-three bg_image rts-wsection-gap" style={{
-      background: 'linear-gradient(135deg, #214BA5FF 0%, #2E3746FF 50%, #065C2AFF 100%)',
+    <div 
+      id='home' 
+      data-section='home'
+      className="rts-banner-area-three bg_image rts-wsection-gap" 
+      style={{
       position: 'relative',
       overflow: 'hidden',
       minHeight: '100vh',
@@ -43,30 +49,102 @@ const HeroSection = () => {
       alignItems: 'center',
       padding: '80px 20px 40px'
     }}>
-      {/* Éléments de décoration animés */}
+      {/* Image de fond avec effet Ken Burns */}
+      {backgroundImage && (
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          zIndex: 0,
+          animation: 'kenBurns 30s ease-in-out infinite alternate'
+        }}></div>
+      )}
+
+      {/* Gradient overlay principal avec transparence */}
       <div style={{
         position: 'absolute',
         top: 0,
-        right: 0,
-        width: '400px',
-        height: '400px',
+        left: 0,
+        width: '100%',
+        height: '100%',
+        background: 'linear-gradient(135deg, rgba(33, 75, 165, 0.85) 0%, rgba(46, 55, 70, 0.90) 50%, rgba(6, 92, 42, 0.85) 100%)',
+        zIndex: 1
+      }}></div>
+
+      {/* Particules animées */}
+      <div className="particles-container" style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: 2,
+        pointerEvents: 'none'
+      }}>
+        {[...Array(8)].map((_, i) => (
+          <div
+            key={i}
+            style={{
+              position: 'absolute',
+              width: '4px',
+              height: '4px',
+              background: 'rgba(34, 197, 94, 0.6)',
+              borderRadius: '50%',
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              animation: `particle ${5 + Math.random() * 5}s linear infinite`,
+              animationDelay: `${Math.random() * 5}s`
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Orbes lumineux animés */}
+      <div style={{
+        position: 'absolute',
+        top: '-10%',
+        right: '-5%',
+        width: '500px',
+        height: '500px',
+        background: 'radial-gradient(circle, rgba(34, 197, 94, 0.2) 0%, transparent 70%)',
+        borderRadius: '50%',
+        filter: 'blur(60px)',
+        pointerEvents: 'none',
+        animation: 'float 8s ease-in-out infinite',
+        zIndex: 2
+      }}></div>
+      <div style={{
+        position: 'absolute',
+        bottom: '-10%',
+        left: '-5%',
+        width: '500px',
+        height: '500px',
         background: 'radial-gradient(circle, rgba(34, 197, 94, 0.15) 0%, transparent 70%)',
         borderRadius: '50%',
         filter: 'blur(60px)',
         pointerEvents: 'none',
-        animation: 'float 8s ease-in-out infinite'
+        animation: 'float 10s ease-in-out infinite 2s',
+        zIndex: 2
       }}></div>
       <div style={{
         position: 'absolute',
-        bottom: 0,
-        left: 0,
-        width: '400px',
-        height: '400px',
-        background: 'radial-gradient(circle, rgba(34, 197, 94, 0.1) 0%, transparent 70%)',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '600px',
+        height: '600px',
+        background: 'radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%)',
         borderRadius: '50%',
-        filter: 'blur(60px)',
+        filter: 'blur(80px)',
         pointerEvents: 'none',
-        animation: 'float 10s ease-in-out infinite 2s'
+        animation: 'pulse 6s ease-in-out infinite',
+        zIndex: 2
       }}></div>
 
       <div style={{ 
@@ -74,7 +152,7 @@ const HeroSection = () => {
         margin: '0 auto', 
         width: '100%',
         position: 'relative', 
-        zIndex: 2 
+        zIndex: 3
       }}>
         <div style={{
           display: 'grid',
@@ -82,11 +160,37 @@ const HeroSection = () => {
           gap: '2rem',
           alignItems: 'center'
         }}>
-          {/* Colonne Gauche - Texte */}
+          {/* Colonne Gauche - Contenu textuel */}
           <div style={{
-            animation: 'slideInLeft 0.8s ease-out'
+            animation: 'slideInLeft 0.8s ease-out, fadeIn 0.8s ease-out'
           }}>
             <div>
+              {/* Badge de disponibilité */}
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                padding: '0.5rem 1rem',
+                background: 'rgba(34, 197, 94, 0.1)',
+                border: '1px solid rgba(34, 197, 94, 0.3)',
+                borderRadius: '2rem',
+                marginBottom: '1.5rem',
+                animation: 'slideInDown 0.8s ease-out, shimmer 3s ease-in-out infinite'
+              }}>
+                <span style={{
+                  width: '8px',
+                  height: '8px',
+                  background: '#22c55e',
+                  borderRadius: '50%',
+                  animation: 'blink 2s ease-in-out infinite'
+                }}></span>
+                <span style={{
+                  fontSize: 'clamp(0.75rem, 2vw, 0.9rem)',
+                  color: '#22c55e',
+                  fontWeight: 600
+                }}>Disponible 24/7</span>
+              </div>
+
               <h1 
                 style={{
                   fontSize: 'clamp(1.5rem, 8vw, 6rem)',
@@ -94,34 +198,23 @@ const HeroSection = () => {
                   lineHeight: '1.2',
                   marginBottom: '1rem',
                   animation: 'slideInDown 0.8s ease-out 0.2s both',
-                  color: '#ffffff'
+                  color: '#22c55e'
                 }}
               >
-                CMO 
+                CMO &
                 <span style={{
-                  background: 'linear-gradient(135deg, #22c55e 0%, #10b981 50%, #059669 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                  fontWeight: 'black',
-                  animation: 'textGradient 3s ease-in-out infinite'
-                }}>
-                  VISTAMD
-                </span>
-                <br />
-                <span style={{
-                  background: 'linear-gradient(135deg, #1075B9 50%, #1075B9 50%)',
+                  background: 'linear-gradient(135deg, #FFFFFFFF 50%, #1075B9 50%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text',
                   fontWeight: 'black'
                 }}>
-                  
+                  VISTAMD
                 </span>
               </h1>
               
               <p style={{
-                fontSize: 'clamp(1rem, 4vw, 1.8rem)',
+                fontSize: 'clamp(1rem, 4vw, 2.8rem)',
                 color: '#e2e8f0',
                 marginBottom: '1rem',
                 fontWeight: 500,
@@ -131,7 +224,7 @@ const HeroSection = () => {
               </p>
 
               <p style={{
-                fontSize: 'clamp(0.85rem, 3vw, 1.2rem)',
+                fontSize: 'clamp(0.85rem, 3vw, 1.8rem)',
                 color: '#cbd5e1',
                 marginBottom: '1.5rem',
                 lineHeight: '1.6',
@@ -161,17 +254,20 @@ const HeroSection = () => {
                     transition: 'all 0.3s ease',
                     cursor: 'pointer',
                     textDecoration: 'none',
-                    color: 'white'
+                    color: 'white',
+                    animation: 'pulse 2s ease-in-out infinite'
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.borderColor = '#22c55e'
                     e.currentTarget.style.backgroundColor = 'rgba(34, 197, 94, 0.15)'
-                    e.currentTarget.style.transform = 'translateY(-3px)'
+                    e.currentTarget.style.transform = 'translateY(-3px) scale(1.05)'
+                    e.currentTarget.style.boxShadow = '0 10px 30px rgba(34, 197, 94, 0.4)'
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.borderColor = 'rgba(34, 197, 94, 0.5)'
                     e.currentTarget.style.backgroundColor = 'rgba(34, 197, 94, 0.05)'
-                    e.currentTarget.style.transform = 'translateY(0)'
+                    e.currentTarget.style.transform = 'translateY(0) scale(1)'
+                    e.currentTarget.style.boxShadow = 'none'
                   }}
                 >
                   <span style={{ fontSize: '1.2rem' }}>📞</span>
@@ -184,9 +280,9 @@ const HeroSection = () => {
             </div>
           </div>
 
-          {/* Colonne Droite - Formulaire */}
+          {/* Colonne Droite - Formulaire de rendez-vous */}
           <div style={{
-            animation: 'slideInRight 0.8s ease-out 0.2s both'
+            animation: 'slideInRight 0.8s ease-out 0.2s both, floatSlow 6s ease-in-out infinite 1s'
           }}>
             <div style={{
               background: 'rgba(30, 41, 59, 0.8)',
@@ -198,16 +294,19 @@ const HeroSection = () => {
               position: 'relative',
               overflow: 'hidden',
               transition: 'all 0.3s ease',
-              animation: 'slideInUp 0.8s ease-out 0.3s both'
+              animation: 'slideInUp 0.8s ease-out 0.3s both, glow 3s ease-in-out infinite'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.borderColor = 'rgba(34, 197, 94, 0.5)'
               e.currentTarget.style.transform = 'translateY(-5px)'
+              e.currentTarget.style.boxShadow = '0 25px 70px rgba(34, 197, 94, 0.3)'
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.borderColor = 'rgba(34, 197, 94, 0.2)'
               e.currentTarget.style.transform = 'translateY(0)'
+              e.currentTarget.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.3)'
             }}>
+              {/* Orbe décoratif rotatif */}
               <div style={{
                 position: 'absolute',
                 top: '-50%',
@@ -220,7 +319,27 @@ const HeroSection = () => {
                 animation: 'rotate 6s linear infinite'
               }}></div>
 
-              <form onSubmit={handleSubmit} style={{ position: 'relative', zIndex: 1 }}>
+              {/* Lignes décoratives animées */}
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '2px',
+                background: 'linear-gradient(90deg, transparent, #22c55e, transparent)',
+                animation: 'shimmerLine 3s ease-in-out infinite'
+              }}></div>
+              <div style={{
+                position: 'absolute',
+                bottom: 0,
+                right: 0,
+                width: '2px',
+                height: '100%',
+                background: 'linear-gradient(180deg, transparent, #22c55e, transparent)',
+                animation: 'shimmerLine 3s ease-in-out infinite 1.5s'
+              }}></div>
+
+              <div style={{ position: 'relative', zIndex: 1 }}>
                 <h3 style={{
                   fontSize: 'clamp(1.2rem, 4vw, 3rem)',
                   fontWeight: 'bold',
@@ -232,12 +351,13 @@ const HeroSection = () => {
                   WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text'
                 }}>
-                  Prenez un renndez-vous
+                  Prenez un rendez-vous
                 </h3>
                 <p style={{ 
                   color: '#D7DDE6FF', 
                   marginBottom: '1rem', 
-                  fontSize: 'clamp(0.8rem, 2.5vw, 1.5rem)'
+                  fontSize: 'clamp(0.8rem, 2.5vw, 1.5rem)',
+                  textAlign: 'center'
                 }}>
                   Des soins immédiats et à long terme sont disponibles pour vous.
                 </p>
@@ -292,9 +412,11 @@ const HeroSection = () => {
                   }}
                   onFocus={(e) => {
                     e.currentTarget.style.borderColor = '#22c55e'
+                    e.currentTarget.style.background = 'rgba(51, 65, 85, 0.8)'
                   }}
                   onBlur={(e) => {
                     e.currentTarget.style.borderColor = 'rgba(34, 197, 94, 0.3)'
+                    e.currentTarget.style.background = 'rgba(51, 65, 85, 0.5)'
                   }}
                 />
                 
@@ -318,9 +440,11 @@ const HeroSection = () => {
                   }}
                   onFocus={(e) => {
                     e.currentTarget.style.borderColor = '#22c55e'
+                    e.currentTarget.style.background = 'rgba(51, 65, 85, 0.8)'
                   }}
                   onBlur={(e) => {
                     e.currentTarget.style.borderColor = 'rgba(34, 197, 94, 0.3)'
+                    e.currentTarget.style.background = 'rgba(51, 65, 85, 0.5)'
                   }}
                 />
                 
@@ -398,7 +522,7 @@ const HeroSection = () => {
                 </select>
                 
                 <button 
-                  type="submit" 
+                  onClick={handleSubmit}
                   style={{
                     width: '100%',
                     padding: '0.875rem',
@@ -410,16 +534,29 @@ const HeroSection = () => {
                     fontSize: '1.5rem',
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
-                    boxShadow: '0 10px 30px rgba(34, 197, 94, 0.3)'
+                    boxShadow: '0 10px 30px rgba(34, 197, 94, 0.3)',
+                    position: 'relative',
+                    overflow: 'hidden'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-2px)'
+                    e.currentTarget.style.transform = 'translateY(-2px) scale(1.02)'
+                    e.currentTarget.style.boxShadow = '0 15px 40px rgba(34, 197, 94, 0.5)'
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)'
+                    e.currentTarget.style.transform = 'translateY(0) scale(1)'
+                    e.currentTarget.style.boxShadow = '0 10px 30px rgba(34, 197, 94, 0.3)'
                   }}
                 >
-                  Prendre Rendez-vous
+                  <span style={{ position: 'relative', zIndex: 1 }}>Prendre Rendez-vous</span>
+                  <span style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: '-100%',
+                    width: '100%',
+                    height: '100%',
+                    background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)',
+                    animation: 'shimmerButton 2s ease-in-out infinite'
+                  }}></span>
                 </button>
 
                 <p style={{
@@ -430,7 +567,7 @@ const HeroSection = () => {
                 }}>
                   Vos données sont sécurisées • Réponse sous 24h
                 </p>
-              </form>
+              </div>
             </div>
           </div>
         </div>
@@ -481,12 +618,41 @@ const HeroSection = () => {
           }
         }
 
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
         @keyframes float {
           0%, 100% {
             transform: translateY(0px);
           }
           50% {
-            transform: translateY(30px);
+            transform: translateY(20px);
+          }
+        }
+
+        @keyframes floatSlow {
+          0%, 100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(10px);
+          }
+        }
+
+        @keyframes pulse {
+          0%, 100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 0.8;
+            transform: scale(1.05);
           }
         }
 
@@ -514,12 +680,88 @@ const HeroSection = () => {
           }
         }
 
+        @keyframes shimmer {
+          0%, 100% {
+            background-color: rgba(34, 197, 94, 0.1);
+            border-color: rgba(34, 197, 94, 0.3);
+          }
+          50% {
+            background-color: rgba(34, 197, 94, 0.2);
+            border-color: rgba(34, 197, 94, 0.5);
+          }
+        }
+
+        @keyframes blink {
+          0%, 100% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0.3;
+          }
+        }
+
+        @keyframes glow {
+          0%, 100% {
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+          }
+          50% {
+            box-shadow: 0 20px 60px rgba(34, 197, 94, 0.2);
+          }
+        }
+
+        @keyframes shimmerLine {
+          0% {
+            opacity: 0.3;
+          }
+          50% {
+            opacity: 1;
+          }
+          100% {
+            opacity: 0.3;
+          }
+        }
+
+        @keyframes shimmerButton {
+          0% {
+            left: -100%;
+          }
+          100% {
+            left: 200%;
+          }
+        }
+
+        @keyframes kenBurns {
+          0% {
+            transform: scale(1) translate(0, 0);
+          }
+          100% {
+            transform: scale(1.1) translate(-5%, -5%);
+          }
+        }
+
+        @keyframes particle {
+          0% {
+            transform: translateY(0) translateX(0);
+            opacity: 0;
+          }
+          10% {
+            opacity: 1;
+          }
+          90% {
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(-100vh) translateX(calc(50px - 100px * var(--random)));
+            opacity: 0;
+          }
+        }
+
         input::-webkit-calendar-picker-indicator {
           filter: invert(1);
         }
 
         @media (max-width: 768px) {
-          div {
+          div[style*="grid-template-columns"] {
             grid-template-columns: 1fr !important;
           }
         }

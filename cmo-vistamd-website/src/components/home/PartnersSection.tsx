@@ -1,10 +1,36 @@
 // src/components/home/PartnersSection.tsx
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { ChevronLeft, ChevronRight, Building2 } from 'lucide-react'
 
 const PartnersSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isAutoplay, setIsAutoplay] = useState(true)
+  const [isVisible, setIsVisible] = useState(false)
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null)
+  const sectionRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Animation se déclenche à chaque fois que la section entre dans le viewport
+        setIsVisible(entry.isIntersecting)
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+      }
+    )
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current)
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current)
+      }
+    }
+  }, [])
 
   const partners = [
     {
@@ -73,13 +99,18 @@ const PartnersSection = () => {
   ]
 
   return (
-    <div id='partners' className="rts-partners-area rts-section-gap" style={{
-      background: '#ffffff',
-      padding: '100px 0',
-      position: 'relative',
-      overflow: 'hidden'
-    }}>
-      {/* Éléments de décoration */}
+    <div 
+      ref={sectionRef}
+      id='partners' 
+      className="rts-partners-area rts-section-gap" 
+      style={{
+        background: '#ffffff',
+        padding: '100px 0',
+        position: 'relative',
+        overflow: 'hidden'
+      }}
+    >
+      {/* Éléments de décoration animés */}
       <div style={{
         position: 'absolute',
         top: '5%',
@@ -105,6 +136,34 @@ const PartnersSection = () => {
         animation: 'float 12s ease-in-out infinite 2s'
       }}></div>
 
+      {/* Particules décoratives */}
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        pointerEvents: 'none',
+        zIndex: 1
+      }}>
+        {[...Array(6)].map((_, i) => (
+          <div
+            key={i}
+            style={{
+              position: 'absolute',
+              width: '3px',
+              height: '3px',
+              background: i % 2 === 0 ? '#22c55e' : '#1075B9',
+              borderRadius: '50%',
+              top: `${15 + Math.random() * 70}%`,
+              left: `${10 + Math.random() * 80}%`,
+              opacity: 0.4,
+              animation: `particleFloat ${8 + Math.random() * 4}s ease-in-out infinite ${Math.random() * 5}s`
+            }}
+          />
+        ))}
+      </div>
+
       <div className="container" style={{ position: 'relative', zIndex: 2 }}>
         {/* Header */}
         <div style={{
@@ -118,9 +177,17 @@ const PartnersSection = () => {
             alignItems: 'center',
             gap: '0.5rem',
             marginBottom: '1rem',
-            animation: 'slideInDown 0.6s ease-out 0.2s both'
+            opacity: isVisible ? 1 : 0,
+            transform: isVisible ? 'translateY(0)' : 'translateY(-30px)',
+            transition: 'opacity 0.6s ease-out 0.2s, transform 0.6s ease-out 0.2s'
           }}>
-            <Building2 size={24} style={{ color: '#22c55e' }} />
+            <Building2 
+              size={24} 
+              style={{ 
+                color: '#22c55e',
+                animation: isVisible ? 'pulse 2s ease-in-out infinite' : 'none'
+              }} 
+            />
             <span style={{
               background: 'linear-gradient(135deg, #22c55e 0%, #10b981 100%)',
               WebkitBackgroundClip: 'text',
@@ -141,7 +208,9 @@ const PartnersSection = () => {
             color: '#0f172a',
             lineHeight: '1.2',
             marginBottom: '1.5rem',
-            animation: 'slideInDown 0.6s ease-out 0.3s both'
+            opacity: isVisible ? 1 : 0,
+            transform: isVisible ? 'scale(1)' : 'scale(0.9)',
+            transition: 'opacity 0.6s ease-out 0.3s, transform 0.6s ease-out 0.3s'
           }}>
             Établissements et Partenaires de Confiance
           </h2>
@@ -150,7 +219,8 @@ const PartnersSection = () => {
             fontSize: '1.15rem',
             color: '#64748b',
             lineHeight: '1.8',
-            animation: 'slideInDown 0.6s ease-out 0.4s both'
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s ease-out 0.4s'
           }}>
             CMO VISTAMD collabore avec les meilleurs établissements publics et privés pour vous offrir les meilleurs services médicaux
           </p>
@@ -160,7 +230,9 @@ const PartnersSection = () => {
         <div style={{
           maxWidth: '1000px',
           margin: '0 auto',
-          animation: 'slideInUp 0.6s ease-out 0.5s both'
+          opacity: isVisible ? 1 : 0,
+          transform: isVisible ? 'translateY(0)' : 'translateY(50px)',
+          transition: 'opacity 0.6s ease-out 0.5s, transform 0.6s ease-out 0.5s'
         }}>
           {/* Main Carousel Display */}
           <div style={{
@@ -175,29 +247,72 @@ const PartnersSection = () => {
                 style={{
                   padding: '2rem',
                   background: '#ffffff',
-                  border: '2px solid rgba(34, 197, 94, 0.1)',
+                  border: hoveredCard === index ? '2px solid #22c55e' : '2px solid rgba(34, 197, 94, 0.1)',
                   borderRadius: '1rem',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '1rem',
-                  transition: 'all 0.3s ease',
-                  animation: `slideInUp 0.6s ease-out ${0.1 * index}s`,
+                  transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
                   cursor: 'pointer',
-                  minHeight: '250px'
+                  minHeight: '250px',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  opacity: isVisible ? 1 : 0,
+                  transform: isVisible ? 'scale(1)' : 'scale(0.9)',
+                  transitionDelay: `${0.6 + index * 0.1}s`
                 }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#22c55e'
-                  e.currentTarget.style.boxShadow = '0 15px 40px rgba(34, 197, 94, 0.15)'
-                  e.currentTarget.style.transform = 'translateY(-5px)'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(34, 197, 94, 0.1)'
-                  e.currentTarget.style.boxShadow = 'none'
-                  e.currentTarget.style.transform = 'translateY(0)'
-                }}
+                onMouseEnter={() => setHoveredCard(index)}
+                onMouseLeave={() => setHoveredCard(null)}
               >
+                {/* Effet de brillance au survol */}
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: hoveredCard === index ? '0' : '-100%',
+                  width: '100%',
+                  height: '100%',
+                  background: 'linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.1), transparent)',
+                  transition: 'left 0.6s ease',
+                  pointerEvents: 'none'
+                }}></div>
+
+                {/* Effet de vague au survol */}
+                <div style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  width: hoveredCard === index ? '250%' : '0%',
+                  height: hoveredCard === index ? '250%' : '0%',
+                  background: 'radial-gradient(circle, rgba(34, 197, 94, 0.08) 0%, transparent 70%)',
+                  transform: 'translate(-50%, -50%)',
+                  transition: 'all 0.6s ease',
+                  borderRadius: '50%',
+                  pointerEvents: 'none'
+                }}></div>
+
+                {/* Badge "Partenaire Officiel" */}
+                <div style={{
+                  position: 'absolute',
+                  top: '10px',
+                  right: '10px',
+                  background: 'linear-gradient(135deg, #22c55e, #10b981)',
+                  color: 'white',
+                  fontSize: '0.65rem',
+                  fontWeight: 'bold',
+                  padding: '0.25rem 0.5rem',
+                  borderRadius: '0.25rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                  opacity: hoveredCard === index ? 1 : 0,
+                  transform: hoveredCard === index ? 'translateY(0) scale(1)' : 'translateY(-10px) scale(0.8)',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 4px 12px rgba(34, 197, 94, 0.3)'
+                }}>
+                  Partenaire
+                </div>
+
                 {/* Logo */}
                 <div style={{
                   width: '150px',
@@ -207,7 +322,11 @@ const PartnersSection = () => {
                   justifyContent: 'center',
                   background: 'rgba(34, 197, 94, 0.05)',
                   borderRadius: '0.75rem',
-                  padding: '1rem'
+                  padding: '1rem',
+                  transition: 'all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+                  transform: hoveredCard === index ? 'scale(1.1) rotate(3deg)' : 'scale(1)',
+                  position: 'relative',
+                  zIndex: 1
                 }}>
                   <img
                     src={partner.logo}
@@ -215,18 +334,25 @@ const PartnersSection = () => {
                     style={{
                       maxWidth: '100%',
                       maxHeight: '100%',
-                      objectFit: 'contain'
+                      objectFit: 'contain',
+                      filter: hoveredCard === index ? 'brightness(1.1)' : 'brightness(1)',
+                      transition: 'filter 0.3s ease'
                     }}
                   />
                 </div>
 
                 {/* Info */}
-                <div style={{ textAlign: 'center' }}>
+                <div style={{ 
+                  textAlign: 'center',
+                  position: 'relative',
+                  zIndex: 1
+                }}>
                   <h3 style={{
                     fontSize: '1.1rem',
                     fontWeight: 'bold',
-                    color: '#0f172a',
-                    marginBottom: '0.5rem'
+                    color: hoveredCard === index ? '#22c55e' : '#0f172a',
+                    marginBottom: '0.5rem',
+                    transition: 'color 0.3s ease'
                   }}>
                     {partner.name}
                   </h3>
@@ -236,6 +362,28 @@ const PartnersSection = () => {
                   }}>
                     {partner.type}
                   </p>
+                </div>
+
+                {/* Checkmark au survol */}
+                <div style={{
+                  position: 'absolute',
+                  bottom: '10px',
+                  left: '10px',
+                  width: '30px',
+                  height: '30px',
+                  background: 'linear-gradient(135deg, #22c55e, #10b981)',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  fontSize: '1rem',
+                  opacity: hoveredCard === index ? 1 : 0,
+                  transform: hoveredCard === index ? 'scale(1) rotate(0deg)' : 'scale(0) rotate(-180deg)',
+                  transition: 'all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+                  boxShadow: '0 5px 15px rgba(34, 197, 94, 0.4)'
+                }}>
+                  ✓
                 </div>
               </div>
             ))}
@@ -247,7 +395,10 @@ const PartnersSection = () => {
             alignItems: 'center',
             justifyContent: 'center',
             gap: '2rem',
-            marginTop: '2rem'
+            marginTop: '2rem',
+            opacity: isVisible ? 1 : 0,
+            transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
+            transition: 'opacity 0.6s ease-out 0.9s, transform 0.6s ease-out 0.9s'
           }}>
             {/* Previous Button */}
             <button
@@ -267,11 +418,11 @@ const PartnersSection = () => {
                 boxShadow: '0 10px 25px rgba(34, 197, 94, 0.2)'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'scale(1.1)'
-                e.currentTarget.style.boxShadow = '0 15px 35px rgba(34, 197, 94, 0.3)'
+                e.currentTarget.style.transform = 'scale(1.15) rotate(-10deg)'
+                e.currentTarget.style.boxShadow = '0 15px 35px rgba(34, 197, 94, 0.4)'
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'scale(1)'
+                e.currentTarget.style.transform = 'scale(1) rotate(0deg)'
                 e.currentTarget.style.boxShadow = '0 10px 25px rgba(34, 197, 94, 0.2)'
               }}
             >
@@ -297,7 +448,14 @@ const PartnersSection = () => {
                     border: 'none',
                     borderRadius: '50px',
                     cursor: 'pointer',
-                    transition: 'all 0.3s ease'
+                    transition: 'all 0.3s ease',
+                    boxShadow: currentIndex === index ? '0 4px 12px rgba(34, 197, 94, 0.3)' : 'none'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'scale(1.2)'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)'
                   }}
                 />
               ))}
@@ -321,20 +479,17 @@ const PartnersSection = () => {
                 boxShadow: '0 10px 25px rgba(34, 197, 94, 0.2)'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'scale(1.1)'
-                e.currentTarget.style.boxShadow = '0 15px 35px rgba(34, 197, 94, 0.3)'
+                e.currentTarget.style.transform = 'scale(1.15) rotate(10deg)'
+                e.currentTarget.style.boxShadow = '0 15px 35px rgba(34, 197, 94, 0.4)'
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'scale(1)'
+                e.currentTarget.style.transform = 'scale(1) rotate(0deg)'
                 e.currentTarget.style.boxShadow = '0 10px 25px rgba(34, 197, 94, 0.2)'
               }}
             >
               <ChevronRight size={24} />
             </button>
           </div>
-
-          {/* Autoplay Toggle */}
-         
         </div>
       </div>
 
@@ -367,6 +522,34 @@ const PartnersSection = () => {
           }
           50% {
             transform: translateY(30px);
+          }
+        }
+
+        @keyframes pulse {
+          0%, 100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 0.8;
+            transform: scale(1.1);
+          }
+        }
+
+        @keyframes particleFloat {
+          0%, 100% {
+            transform: translateY(0) translateX(0);
+            opacity: 0.4;
+          }
+          25% {
+            opacity: 0.7;
+          }
+          50% {
+            transform: translateY(-20px) translateX(10px);
+            opacity: 0.4;
+          }
+          75% {
+            opacity: 0.7;
           }
         }
       `}</style>

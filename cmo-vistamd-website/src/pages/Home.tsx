@@ -9,6 +9,7 @@ import FAQSection from '@/components/home/FAQSection'
 import PartnersSection from '@/components/home/PartnersSection'
 import TestimonialsSection from '@/components/home/TestimonialsSection'
 import ContactSection from '@/components/home/ContactSection'
+import TeamSection from '@/components/home/TeamSection'
 
 function Home() {
   return (
@@ -26,7 +27,7 @@ function Home() {
       <BlogSection />
 
       <FAQSection />
-
+<TeamSection />
       <PartnersSection />
 
       <TestimonialsSection />

@@ -12,6 +12,7 @@ const Header = () => {
     { label: 'Accueil', id: 'home' },
     { label: 'Nous', id: 'about' },
     { label: 'Services', id: 'services' },
+    { label: 'Équipe', id: 'team' },
     { label: 'Blog', id: 'blog' },
     { label: 'FAQ', id: 'faq' },
     { label: 'Partenaires', id: 'partners' },
@@ -19,23 +20,33 @@ const Header = () => {
     { label: 'Contact', id: 'contact' }
   ]
 
-  // Scroll effect
+  // Scroll effect avec détection améliorée
   useEffect(() => {
     const handleScroll = () => {
       const position = window.scrollY
       setScrollPosition(position)
 
-      // Détecte la section active
-      const sections = document.querySelectorAll('section[data-section]')
+      // Détecte la section active - MODIFIÉ pour chercher tous les éléments avec id
+      const sections = navItems.map(item => document.getElementById(item.id)).filter(Boolean)
+      
+      let currentSection = 'home'
+      
       sections.forEach((section) => {
-        const sectionTop = (section as HTMLElement).offsetTop - 100
-        const sectionHeight = (section as HTMLElement).offsetHeight
-        if (position >= sectionTop && position < sectionTop + sectionHeight) {
-          setActiveSection((section as HTMLElement).getAttribute('data-section') || '')
+        if (section) {
+          const sectionTop = section.offsetTop - 150 // Offset pour le header
+          const sectionHeight = section.offsetHeight
+          const sectionBottom = sectionTop + sectionHeight
+          
+          if (position >= sectionTop && position < sectionBottom) {
+            currentSection = section.id
+          }
         }
       })
+      
+      setActiveSection(currentSection)
     }
 
+    handleScroll() // Appel initial
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
@@ -44,9 +55,14 @@ const Header = () => {
     setIsMenuOpen(false)
     const element = document.getElementById(sectionId)
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      const headerOffset = 80
+      const elementPosition = element.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      })
     }
   }
 
@@ -170,7 +186,7 @@ const Header = () => {
           }}
         >
           <a
-            href="tel:+2250700000000"
+            href="+2250700000000"
             style={{
               display: 'flex',
               alignItems: 'center',
